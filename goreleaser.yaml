@@ -13,9 +13,6 @@ builds:
 
     ldflags: -s -w -X github.com/italolelis/reachable/cmd.version={{.Version}}
 
-archive:
-  format: binary
-
 brew:
   # Reporitory to push the tap to.
   github:
