@@ -1,6 +1,6 @@
 # Reachable
 
-[![Build Status](https://travis-ci.com/italolelis/reachable.svg)](https://travis-ci.com/italolelis/reachable) [![Go Report Card](https://goreportcard.com/badge/github.com/italolelis/reachable)](https://goreportcard.com/report/github.com/italolelis/reachable) [![GoDoc](https://godoc.org/github.com/italolelis/reachable?status.svg)](https://godoc.org/github.com/italolelis/reachable)
+[![Build Status](https://travis-ci.com/italolelis/reachable.svg)](https://travis-ci.com/italolelis/reachable) [![Coverage Status](https://coveralls.io/repos/github/italolelis/reachable/badge.svg?branch=master)](https://coveralls.io/github/italolelis/reachable?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/italolelis/reachable)](https://goreportcard.com/report/github.com/italolelis/reachable) [![GoDoc](https://godoc.org/github.com/italolelis/reachable?status.svg)](https://godoc.org/github.com/italolelis/reachable)
 
 > A CLI tool to check if a domain is up
 
