@@ -6,8 +6,18 @@ Welcome to reachable a CLI tool that helps you to check if a domain is up or dow
 
 ## Installation
 
-Just go the [releases](https://github.com/italolelis/reachable/releases) and download the latest one for your platform.
+### MacOS
 
+You can use our homebrew tap to install it
+
+```sh
+brew tep italolelis/homebrew-reachable
+brew install reachable
+```
+
+### Manual
+
+Go the [releases](https://github.com/italolelis/reachable/releases) and download the latest one for your platform.
 Just place the binary in your $PATH and you are good to go.
 
 ## Usage
