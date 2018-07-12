@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 
 	"github.com/gojektech/heimdall"
@@ -25,11 +25,16 @@ type Reachable struct {
 func IsReachable(ctx context.Context, domain string, timeout time.Duration) (*Reachable, error) {
 	var result httpstat.Result
 
-	if !strings.Contains(domain, "http") {
-		domain = "http://" + domain
+	u, err := url.Parse(domain)
+	if err != nil {
+		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodGet, domain, nil)
+	if u.Scheme == "" {
+		u.Scheme = "http"
+	}
+
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return nil, err
 	}

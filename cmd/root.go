@@ -27,6 +27,8 @@ func NewRootCmd() *cobra.Command {
 		Short: "Reachable is a CLI tool to check if a domain is up",
 		Example: `
 		reachable check google.com
+		
+		reachable check google.com facebook.com twitter.com
 
 		reachable check google.com -v
 		`,

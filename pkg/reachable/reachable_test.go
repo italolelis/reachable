@@ -32,6 +32,12 @@ func TestReachable(t *testing.T) {
 			function: testLookupDomain,
 		},
 		{
+			scenario: "test lookup domain and port but no scheme",
+			domain:   "google.com:443",
+			timeout:  10 * time.Second,
+			function: testInvalidDomain,
+		},
+		{
 			scenario: "test invalid domain",
 			domain:   "google...wrong.com",
 			timeout:  10 * time.Second,
