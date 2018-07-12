@@ -1,0 +1,37 @@
+project_name: reachable
+builds:
+  - main: main.go
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+
+    env:
+      - CGO_ENABLED=0
+
+    ldflags: -s -w -X github.com/italolelis/reachable/cmd.version={{.Version}}
+
+archive:
+  format: binary
+
+brew:
+  # Reporitory to push the tap to.
+  github:
+    owner: italolelis
+    name: homebrew-reachable
+
+  # Git author used to commit to the repository.
+  # Defaults are shown.
+  commit_author:
+    name: italolelis
+    email: italolelis@gmail.com
+
+  # Your app's homepage.
+  # Default is empty.
+  homepage: "https://github.com/italolelis/reachable"
+
+  # Your app's description.
+  # Default is empty.
+  description: "A CLI tool to check if a domain is up"
