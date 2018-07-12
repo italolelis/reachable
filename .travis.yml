@@ -1,13 +1,15 @@
 language: go
 go: '1.10'
 before_install:
+  - go get github.com/go-playground/overall
   - go get github.com/mattn/goveralls
 install: 
     - make setup
 script: 
     - make test
 after_success:
-  - $GOPATH/bin/goveralls -service=travis-ci
+  - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
+  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
   - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
 notifications:
   email: false
