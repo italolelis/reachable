@@ -6,6 +6,10 @@
 
 Welcome to reachable a CLI tool that helps you to check if a domain is up or down.
 
+<p align="center">
+<a href="https://asciinema.org/a/LJSooVahoiopp9Vx6THTEnwnP" target="_blank"><img src="https://asciinema.org/a/LJSooVahoiopp9Vx6THTEnwnP.png" width="70%"/></a>
+</p>
+
 ## Installation
 
 ### MacOS
