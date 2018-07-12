@@ -32,6 +32,16 @@ Just place the binary in your $PATH and you are good to go.
 reachable [command] [--flags]
 ``` 
 
+A few examples 
+
+```
+$ reachable check google.com
+
+$ reachable check google.com facebook.com twitter.com
+
+$ reachable check google.com -v
+```
+
 ### Commands
 
 | Command                  | Description                          |
