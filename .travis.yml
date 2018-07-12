@@ -1,10 +1,13 @@
 language: go
 go: '1.10'
-install: make setup
-script: make test
+before_install:
+  - go get github.com/mattn/goveralls
+install: 
+    - make setup
+script: 
+    - make test
 after_success:
-  # - go get github.com/mattn/goveralls
-  # - goveralls -coverprofile=coverage.out -service=travis-ci -repotoken="$COVERALLS_TOKEN"
+  - $GOPATH/bin/goveralls -service=travis-ci
   - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
 notifications:
   email: false
