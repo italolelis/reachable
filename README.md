@@ -1,8 +1,8 @@
 # Reachable
 
-> A CLI tool to check if a domain is up
+[![Build Status](https://travis-ci.com/italolelis/reachable.svg)](https://travis-ci.com/italolelis/reachable) [![Go Report Card](https://goreportcard.com/badge/github.com/italolelis/reachable)](https://goreportcard.com/report/github.com/italolelis/reachable) [![GoDoc](https://godoc.org/github.com/italolelis/reachable?status.svg)](https://godoc.org/github.com/italolelis/reachable)
 
-[![Build Status](https://travis-ci.org/italolelis/reachable.svg)](https://travis-ci.org/italolelis/reachable) [![Go Report Card](https://goreportcard.com/badge/github.com/italolelis/reachable)](https://goreportcard.com/report/github.com/italolelis/reachable) [![GoDoc](https://godoc.org/github.com/italolelis/reachable?status.svg)](https://godoc.org/github.com/italolelis/reachable)
+> A CLI tool to check if a domain is up
 
 Welcome to reachable a CLI tool that helps you to check if a domain is up or down.
 
