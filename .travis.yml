@@ -8,8 +8,9 @@ install:
 script: 
     - make test
 after_success:
+  - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
   - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
-  - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
+ 
 notifications:
   email: false
