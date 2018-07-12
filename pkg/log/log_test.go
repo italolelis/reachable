@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMiddleware(t *testing.T) {
+func TestLogger(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {

@@ -4,9 +4,8 @@ import (
 	"context"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"net/url"
+	"strings"
 	"time"
 
 	"github.com/gojektech/heimdall"
@@ -26,16 +25,11 @@ type Reachable struct {
 func IsReachable(ctx context.Context, domain string, timeout time.Duration) (*Reachable, error) {
 	var result httpstat.Result
 
-	u, err := url.Parse(domain)
-	if err != nil {
-		return nil, err
+	if !strings.Contains(domain, "http") {
+		domain = "http://" + domain
 	}
 
-	if u.Scheme == "" {
-		u.Scheme = "http"
-	}
-
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, domain, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +44,7 @@ func IsReachable(ctx context.Context, domain string, timeout time.Duration) (*Re
 	}
 
 	if _, err := io.Copy(ioutil.Discard, res.Body); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	res.Body.Close()
 	result.End(time.Now())
