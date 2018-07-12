@@ -8,11 +8,11 @@ WARN_COLOR=\033[33;01m
 # If you change this, run `make clean`.
 PKG_SRC := github.com/italolelis/reachable
 
-.PHONY: all clean deps build
+.PHONY: all clean setup build
 
-all: clean deps test build
+all: clean setup test build
 
-deps:
+setup:
 	@echo "$(OK_COLOR)==> Installing dependencies$(NO_COLOR)"
 	@go get -u github.com/golang/dep/cmd/dep
 	@go get -u github.com/golang/lint/golint

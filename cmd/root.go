@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/italolelis/reachable/pkg/log"
-	"github.com/sirupsen/logrus"
+	"github.com/apex/log"
+	logCtx "github.com/italolelis/reachable/pkg/log"
 	"github.com/spf13/cobra"
 )
 
@@ -20,14 +20,14 @@ type (
 // NewRootCmd creates the root command
 func NewRootCmd() *cobra.Command {
 	opts := RootOptions{}
-	ctx := log.NewContext(context.Background())
+	ctx := logCtx.NewContext(context.Background())
 
 	cmd := cobra.Command{
 		Use:   "reachable",
 		Short: "Reachable is a CLI tool to check if a domain is up",
 		PersistentPreRun: func(ccmd *cobra.Command, args []string) {
 			if opts.verbose {
-				log.WithContext(context.Background()).SetLevel(logrus.DebugLevel)
+				log.SetLevel(log.DebugLevel)
 			}
 		},
 	}
