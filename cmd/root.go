@@ -25,6 +25,11 @@ func NewRootCmd() *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "reachable",
 		Short: "Reachable is a CLI tool to check if a domain is up",
+		Example: `
+		reachable check google.com
+
+		reachable check google.com -v
+		`,
 		PersistentPreRun: func(ccmd *cobra.Command, args []string) {
 			if opts.verbose {
 				log.SetLevel(log.DebugLevel)
