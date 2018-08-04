@@ -1,12 +1,18 @@
 language: go
-go: '1.10'
+
+go:
+  - "1.11beta3"
+
 before_install:
   - go get github.com/go-playground/overalls
   - go get github.com/mattn/goveralls
-install: 
+
+install:
     - make setup
-script: 
+
+script:
     - make test
+
 after_success:
   - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
