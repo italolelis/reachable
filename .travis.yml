@@ -1,5 +1,9 @@
 language: go
 
+stages:
+  - name: after_success
+    if: tag IS blank
+
 go:
   - "1.11beta3"
 
@@ -7,7 +11,8 @@ script:
     - GO111MODULE=on make test
 
 after_success:
-  - rm -rf .git
+  - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
+  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
 
 deploy:
   - provider: script
@@ -17,9 +22,5 @@ deploy:
       tags: true
       condition: $TRAVIS_OS_NAME = linux
 
-after_deploy:
-  - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
-  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
- 
 notifications:
   email: false
