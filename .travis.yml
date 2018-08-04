@@ -7,12 +7,15 @@ stages:
 go:
   - "1.10"
 
-before_script:
+before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/go-playground/overalls
 
+before_script:
+  - make setup
+
 script:
-    - make test
+  - make test
 
 after_success:
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
