@@ -7,9 +7,9 @@ stages:
 go:
   - "1.11beta3"
 
-after_script:
-  - go get github.com/mattn/goveralls
-  - go get github.com/go-playground/overalls
+before_script:
+  - GO111MODULE=on go get github.com/mattn/goveralls
+  - GO111MODULE=on go get github.com/go-playground/overalls
 
 script:
     - GO111MODULE=on make test
