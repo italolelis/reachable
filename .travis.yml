@@ -11,7 +11,7 @@ script:
     - GO111MODULE=on make test
 
 after_success:
-  - git rm --cached go.mod go.sum
+  - rm -rf .git
 
 deploy:
   - provider: script
