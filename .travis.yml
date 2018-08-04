@@ -5,14 +5,14 @@ stages:
     if: tag IS blank
 
 go:
-  - "1.11beta3"
+  - "1.10"
 
 before_script:
-  - GO111MODULE=on go get github.com/mattn/goveralls
-  - GO111MODULE=on go get github.com/go-playground/overalls
+  - go get github.com/mattn/goveralls
+  - go get github.com/go-playground/overalls
 
 script:
-    - GO111MODULE=on make test
+    - make test
 
 after_success:
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
@@ -21,7 +21,7 @@ after_success:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: GO111MODULE=on curl -sL https://git.io/goreleaser | bash
+    script: curl -sL https://git.io/goreleaser | bash
     on:
       tags: true
       condition: $TRAVIS_OS_NAME = linux
