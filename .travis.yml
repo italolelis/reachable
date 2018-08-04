@@ -4,15 +4,24 @@ go:
   - "1.11beta3"
 
 before_install:
-  - go get github.com/go-playground/overalls
-  - go get github.com/mattn/goveralls
+  - GO111MODULE=on go get github.com/go-playground/overalls
+  - GO111MODULE=on go get github.com/mattn/goveralls
 
 script:
     - GO111MODULE=on make test
 
 after_success:
   - git rm --cached go.mod go.sum
-  - test -n "$TRAVIS_TAG" && GO111MODULE=on curl -sL http://git.io/goreleaser | bash
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: GO111MODULE=on curl -sL https://git.io/goreleaser | bash
+    on:
+      tags: true
+      condition: $TRAVIS_OS_NAME = linux
+
+after_deploy:
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
   - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
  
