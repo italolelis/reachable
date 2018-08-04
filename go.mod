@@ -17,6 +17,7 @@ require (
 	github.com/stretchr/testify v1.2.2
 	github.com/tcnksm/go-httpstat v0.2.0
 	github.com/yookoala/realpath v1.0.0 // indirect
+	golang.org/x/lint v0.0.0-20180702182130-06c8688daad7 // indirect
 	golang.org/x/net v0.0.0-20180712202826-d0887baf81f4
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f
 	golang.org/x/tools v0.0.0-20180803180156-3c07937fe18c // indirect
