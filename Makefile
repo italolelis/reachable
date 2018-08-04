@@ -14,7 +14,6 @@ all: clean setup test build
 
 setup: tools.dep
 	@echo "$(OK_COLOR)==> Installing dependencies$(NO_COLOR)"
-	@go get -u github.com/golang/lint/golint
 	@dep ensure -vendor-only
 
 build:
@@ -57,5 +56,5 @@ tools.golint:
 tools.dep:
 	@command -v dep >/dev/null ; if [ $$? -ne 0 ]; then \
 		echo "--> installing dep"; \
-		@go get -u github.com/golang/dep/cmd/dep; \
+		go get -u github.com/golang/dep/cmd/dep; \
 	fi
