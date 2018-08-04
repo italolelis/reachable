@@ -8,10 +8,10 @@ before_install:
   - go get github.com/mattn/goveralls
 
 script:
-    - make test
+    - GO111MODULE=on make test
 
 after_success:
-  - test -n "$TRAVIS_TAG" && curl -sL http://git.io/goreleaser | bash
+  - test -n "$TRAVIS_TAG" && GO111MODULE=on curl -sL http://git.io/goreleaser | bash
   - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
   - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
  
