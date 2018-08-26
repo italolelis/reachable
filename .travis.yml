@@ -16,8 +16,7 @@ script:
 after_success:
   - if [ -z $TRAVIS_TAG ]; then $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug; else echo "It's a tag build, skipping...."; fi
   - if [ -z $TRAVIS_TAG ]; then $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN; else echo "It's a tag build, skipping...."; fi
-  - cat go.mod
-  
+
 deploy:
   - provider: script
     skip_cleanup: true
