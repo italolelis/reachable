@@ -6,6 +6,7 @@ require (
 	github.com/go-playground/overalls v0.0.0-20180201144345-22ec1a223b7c // indirect
 	github.com/gojektech/heimdall v5.0.0+incompatible
 	github.com/gojektech/valkyrie v0.0.0-20180524055739-b19510f6c63c // indirect
+	github.com/golang/lint v0.0.0-20180702182130-06c8688daad7 // indirect
 	github.com/mattn/goveralls v0.0.2 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

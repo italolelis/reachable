@@ -8,6 +8,8 @@ github.com/gojektech/heimdall v5.0.0+incompatible h1:FDgMItzHNG5BdXQE2tLpoPR0B1X
 github.com/gojektech/heimdall v5.0.0+incompatible/go.mod h1:8hRIZ3+Kz0r3GAFI9QrUuvZht8ypg5Rs8schCXioLOo=
 github.com/gojektech/valkyrie v0.0.0-20180524055739-b19510f6c63c h1:muIXCSMlpYUOBdsYkHNwwJs5SUgiDRzEPMmsd7swnnU=
 github.com/gojektech/valkyrie v0.0.0-20180524055739-b19510f6c63c/go.mod h1:tDYRk1s5Pms6XJjj5m2PxAzmQvaDU8GqDf1u6x7yxKw=
+github.com/golang/lint v0.0.0-20180702182130-06c8688daad7 h1:2hRPrmiwPrp3fQX967rNJIhQPtiGXdlQWAxKbKw3VHA=
+github.com/golang/lint v0.0.0-20180702182130-06c8688daad7/go.mod h1:tluoj9z5200jBnyusfRPU2LqT6J+DAorxEvtC7LHB+E=
 github.com/mattn/goveralls v0.0.2 h1:7eJB6EqsPhRVxvwEXGnqdO2sJI0PTsrWoTMXEk9/OQc=
 github.com/mattn/goveralls v0.0.2/go.mod h1:8d1ZMHsd7fW6IRPKQh46F2WRpyib5/X4FOpevwGNQEw=
 github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=
