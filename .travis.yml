@@ -7,12 +7,12 @@ stages:
 go:
   - "1.11"
 
+env:
+  - GO111MODULE=on
+  
 before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/go-playground/overalls
-
-before_script:
-  - make setup
 
 script:
   - make test
