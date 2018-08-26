@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gojektech/heimdall"
+	"github.com/gojektech/heimdall/httpclient"
 	httpstat "github.com/tcnksm/go-httpstat"
 )
 
@@ -42,7 +42,7 @@ func IsReachable(ctx context.Context, domain string, timeout time.Duration) (*Re
 	ctx = httpstat.WithHTTPStat(ctx, &result)
 	req = req.WithContext(ctx)
 
-	c := heimdall.NewHTTPClient(timeout)
+	c := httpclient.NewClient(httpclient.WithHTTPTimeout(timeout))
 	res, err := c.Do(req)
 	if err != nil {
 		return nil, err
