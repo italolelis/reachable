@@ -1,15 +1,11 @@
 language: go
 
-stages:
-  - name: after_success
-    if: tag IS blank
-
 go:
   - "1.11"
 
 env:
   - GO111MODULE=on
-  
+
 before_install:
   - go get github.com/mattn/goveralls
   - go get github.com/go-playground/overalls
@@ -18,8 +14,8 @@ script:
   - make test
 
 after_success:
-  - test -n "$TRAVIS_TAG" && $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
-  - test -n "$TRAVIS_TAG" && $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
+  - if [ -z $TRAVIS_TAG ]; then $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug; else echo "It's a tag build, skipping...."; fi
+  - if [ -z $TRAVIS_TAG ]; then $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN; else echo "It's a tag build, skipping...."; fi
 
 deploy:
   - provider: script
