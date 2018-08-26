@@ -5,7 +5,7 @@ stages:
     if: tag IS blank
 
 go:
-  - "1.10"
+  - "1.11"
 
 before_install:
   - go get github.com/mattn/goveralls
@@ -18,8 +18,8 @@ script:
   - make test
 
 after_success:
-  - $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
-  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
+  - test -n "$TRAVIS_TAG" && $GOPATH/bin/overalls -project=github.com/italolelis/reachable -covermode=count -debug
+  - test -n "$TRAVIS_TAG" && $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
 
 deploy:
   - provider: script
