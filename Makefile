@@ -11,7 +11,7 @@ build:
 	@echo "$(OK_COLOR)==> Building... $(NO_COLOR)"
 	go build -ldflags "-s -w" -ldflags "-X cmd.version=$(VERSION)" -o "dist/reachable" .
 
-test: lint format vet
+test: format vet
 	@echo "$(OK_COLOR)==> Running tests$(NO_COLOR)"
 	@go test -v -cover ./...
 
@@ -23,23 +23,6 @@ vet:
 	@echo "$(OK_COLOR)==> checking code correctness with 'go vet' tool$(NO_COLOR)"
 	@go vet ./...
 
-lint: tools.golint
-	@echo "$(OK_COLOR)==> checking code style with 'golint' tool$(NO_COLOR)"
-	@go list ./... | xargs -n 1 golint -set_exit_status
-
 clean:
 	@echo "$(OK_COLOR)==> Cleaning project$(NO_COLOR)"
 	@go clean
-
-#---------------
-#-- tools
-#---------------
-
-.PHONY: tools tools.dep tools.golint
-tools: tools.dep tools.golint
-
-tools.golint:
-	@command -v golint >/dev/null ; if [ $$? -ne 0 ]; then \
-		echo "--> installing golint"; \
-		go get github.com/golang/lint/golint; \
-	fi
