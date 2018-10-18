@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/apcera/termtables"
 	alog "github.com/apex/log"
 	"github.com/italolelis/reachable/pkg/log"
 	"github.com/italolelis/reachable/pkg/reachable"
@@ -20,43 +21,52 @@ func NewCheckCmd(ctx context.Context, timeout time.Duration) *cobra.Command {
 		Aliases: []string{"v"},
 		Run: func(cmd *cobra.Command, args []string) {
 			var wg errgroup.Group
+			var results [][]interface{}
 			// wg, ctx := errgroup.WithContext(ctx)
 			logger := log.WithContext(ctx)
 
 			for _, domain := range args {
 				domain := domain
 				wg.Go(func() error {
-					lg := logger.WithField("domain", domain)
 					result, err := reachable.IsReachable(ctx, domain, timeout)
 					if err != nil {
-						if lg.Logger.Level == alog.DebugLevel {
-							lg.Error(err.Error())
+						if logger.Level == alog.DebugLevel {
+							logger.Error(err.Error())
 						}
 
-						lg.Error("Unreachable!")
+						logger.WithField("domain", domain).Error("Unreachable!")
 						return err
 					}
 
-					lg.Debugf("Domain %s", result.Domain)
-					lg.Debugf("Port %s", result.Port)
-					lg.Debugf("Status Code %d", result.StatusCode)
-					lg.Debugf("DNS Lookup %d ms", int(result.Response.DNSLookup/time.Millisecond))
-					lg.Debugf("TCP Connection %d ms", int(result.Response.TCPConnection/time.Millisecond))
-					lg.Debugf("TLS Handshake %d ms", int(result.Response.TLSHandshake/time.Millisecond))
-					lg.Debugf("Server Processing %d ms", int(result.Response.ServerProcessing/time.Millisecond))
-					lg.Debugf("Content Transfer %d ms", int(result.Response.ContentTransfer(time.Now())/time.Millisecond))
-					lg.Debugf("Total Time %d ms", int(result.Response.Total(time.Now())/time.Millisecond))
+					results = append(results, []interface{}{
+						domain,
+						result.StatusCode,
+						int(result.Response.DNSLookup / time.Millisecond),
+						int(result.Response.TCPConnection / time.Millisecond),
+						int(result.Response.TLSHandshake / time.Millisecond),
+						int(result.Response.ServerProcessing / time.Millisecond),
+						int(result.Response.ContentTransfer(time.Now()) / time.Hour),
+						int(result.Response.Total(time.Now()) / time.Millisecond),
+					})
 
-					lg.Info("Reachable!")
+					logger.WithField("domain", domain).Info("Reachable!")
 
-					if lg.Logger.Level == alog.DebugLevel {
-						fmt.Println("")
-					}
 					return nil
 				})
 			}
 
 			wg.Wait()
+
+			if logger.Level == alog.DebugLevel {
+				table := termtables.CreateTable()
+				table.AddHeaders("Domain", "Status Code", "DNS Lookup", "TCP Connection", "TLS Handshake", "Server Processing", "Content Transfer", "Total Time")
+
+				for _, r := range results {
+					table.AddRow(r...)
+				}
+
+				fmt.Printf(table.Render())
+			}
 		},
 	}
 }

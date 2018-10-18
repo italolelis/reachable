@@ -1,11 +1,13 @@
 module github.com/italolelis/reachable
 
 require (
+	github.com/apcera/termtables v0.0.0-20170405184538-bcbc5dc54055
 	github.com/apex/log v1.0.0
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gojektech/heimdall v5.0.0+incompatible
 	github.com/gojektech/valkyrie v0.0.0-20180524055739-b19510f6c63c // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/mattn/go-runewidth v0.0.3 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/cobra v0.0.3
