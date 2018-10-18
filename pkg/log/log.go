@@ -2,6 +2,7 @@ package log
 
 import (
 	"context"
+	"os"
 
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
@@ -14,7 +15,7 @@ const loggerKey loggerKeyType = iota
 var logger *log.Logger
 
 func init() {
-	log.SetHandler(cli.Default)
+	log.SetHandler(cli.New(os.Stdout))
 	if l, ok := log.Log.(*log.Logger); ok {
 		logger = l
 	}

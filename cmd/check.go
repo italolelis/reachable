@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/apcera/termtables"
@@ -65,7 +66,7 @@ func NewCheckCmd(ctx context.Context, timeout time.Duration) *cobra.Command {
 					table.AddRow(r...)
 				}
 
-				fmt.Printf(table.Render())
+				fmt.Fprint(os.Stderr, table.Render())
 			}
 		},
 	}
