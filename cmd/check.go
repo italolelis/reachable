@@ -21,9 +21,8 @@ func NewCheckCmd(ctx context.Context, timeout time.Duration) *cobra.Command {
 		Short:   "Checks if a domain is reachable",
 		Aliases: []string{"v"},
 		Run: func(cmd *cobra.Command, args []string) {
-			var wg errgroup.Group
 			var results [][]interface{}
-			// wg, ctx := errgroup.WithContext(ctx)
+			wg, ctx := errgroup.WithContext(ctx)
 			logger := log.WithContext(ctx)
 
 			for _, domain := range args {
@@ -56,11 +55,23 @@ func NewCheckCmd(ctx context.Context, timeout time.Duration) *cobra.Command {
 				})
 			}
 
-			wg.Wait()
+			if err := wg.Wait(); err != nil {
+				logger.WithError(err).Error("An error happened when trying to reach an URI")
+				return
+			}
 
 			if logger.Level == alog.DebugLevel {
 				table := termtables.CreateTable()
-				table.AddHeaders("Domain", "Status Code", "DNS Lookup", "TCP Connection", "TLS Handshake", "Server Processing", "Content Transfer", "Total Time")
+				table.AddHeaders(
+					"Domain",
+					"Status Code",
+					"DNS Lookup",
+					"TCP Connection",
+					"TLS Handshake",
+					"Server Processing",
+					"Content Transfer",
+					"Total Time",
+				)
 
 				for _, r := range results {
 					table.AddRow(r...)
