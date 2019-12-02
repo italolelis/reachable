@@ -17,7 +17,7 @@ Welcome to reachable a CLI tool that helps you to check if a domain is up or dow
 You can use our homebrew tap to install it
 
 ```sh
-brew tep italolelis/homebrew-reachable
+brew tap italolelis/homebrew-reachable
 brew install reachable
 ```
 
