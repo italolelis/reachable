@@ -1,38 +1,57 @@
+// nolint: gochecknoinits, gochecknoglobals
 package log
 
 import (
 	"context"
 	"os"
 
-	"github.com/apex/log"
-	"github.com/apex/log/handlers/cli"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type loggerKeyType int
 
 const loggerKey loggerKeyType = iota
 
-var logger *log.Logger
+var (
+	atom   zap.AtomicLevel
+	logger *zap.SugaredLogger
+)
 
 func init() {
-	log.SetHandler(cli.New(os.Stdout))
-	if l, ok := log.Log.(*log.Logger); ok {
-		logger = l
-	}
+	atom = zap.NewAtomicLevel()
+
+	l := zap.New(zapcore.NewCore(
+		zapcore.NewConsoleEncoder(zap.NewProductionEncoderConfig()),
+		zapcore.Lock(os.Stdout),
+		atom,
+	))
+
+	logger = l.Sugar()
 }
 
-// NewContext returns a context that has a logrus logger
-func NewContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, loggerKey, WithContext(ctx))
+// SetLevel dinamically changes the log level.
+func SetLevel(lvl string) {
+	atom.UnmarshalText([]byte(lvl))
 }
 
-// WithContext returns a logrus logger from the context
-func WithContext(ctx context.Context) *log.Logger {
+// NewContext creates a new logger with fields.
+func NewContext(ctx context.Context, fields ...interface{}) context.Context {
+	return context.WithValue(ctx, loggerKey, WithContext(ctx).With(fields...))
+}
+
+// NewContextLog creates a new logger context from another logger instance.
+func NewContextLog(ctx context.Context, l *zap.SugaredLogger) context.Context {
+	return context.WithValue(ctx, loggerKey, l)
+}
+
+// WithContext gets the existing logger from context. If not present returns the default.
+func WithContext(ctx context.Context) *zap.SugaredLogger {
 	if ctx == nil {
 		return logger
 	}
 
-	if ctxLogger, ok := ctx.Value(loggerKey).(*log.Logger); ok {
+	if ctxLogger, ok := ctx.Value(loggerKey).(*zap.SugaredLogger); ok {
 		return ctxLogger
 	}
 
