@@ -22,31 +22,31 @@ func TestReachable(t *testing.T) {
 		{
 			scenario: "test success lookup domain",
 			domain:   "https://google.com",
-			timeout:  10 * time.Second,
+			timeout:  2 * time.Second,
 			function: testLookupDomain,
 		},
 		{
 			scenario: "test success lookup domain with no scheme",
 			domain:   "google.com",
-			timeout:  10 * time.Second,
+			timeout:  2 * time.Second,
 			function: testLookupDomain,
 		},
 		{
 			scenario: "test lookup domain and port but no scheme",
 			domain:   "google.com:443",
-			timeout:  10 * time.Second,
+			timeout:  2 * time.Second,
 			function: testInvalidDomain,
 		},
 		{
 			scenario: "test invalid domain",
 			domain:   "google...wrong.com",
-			timeout:  10 * time.Second,
+			timeout:  2 * time.Second,
 			function: testInvalidDomain,
 		},
 		{
 			scenario: "test success lookup domain with no scheme",
 			domain:   "wrongurlfortest.com",
-			timeout:  10 * time.Second,
+			timeout:  2 * time.Second,
 			function: testInvalidDomain,
 		},
 	}
@@ -58,14 +58,20 @@ func TestReachable(t *testing.T) {
 	}
 }
 
-func testLookupDomain(t *testing.T, domain string, timeout time.Duration) {
-	result, err := IsReachable(context.Background(), domain, timeout)
+func testLookupDomain(t *testing.T, url string, timeout time.Duration) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	result, err := IsReachable(ctx, NewTarget(url))
 	require.NoError(t, err)
 
 	assert.Equal(t, http.StatusOK, result.StatusCode)
 }
 
-func testInvalidDomain(t *testing.T, domain string, timeout time.Duration) {
-	_, err := IsReachable(context.Background(), domain, timeout)
+func testInvalidDomain(t *testing.T, url string, timeout time.Duration) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	_, err := IsReachable(ctx, NewTarget(url))
 	assert.Error(t, err)
 }
