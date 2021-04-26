@@ -7,78 +7,86 @@ import (
 	"time"
 
 	"github.com/apcera/termtables"
-	alog "github.com/apex/log"
 	"github.com/italolelis/reachable/pkg/log"
 	"github.com/italolelis/reachable/pkg/reachable"
 	"github.com/spf13/cobra"
-	"golang.org/x/sync/errgroup"
+)
+
+type (
+	// CheckOptions represents the check command options
+	CheckOptions struct {
+		timeout time.Duration
+		method  string
+	}
 )
 
 // NewCheckCmd creates a new check command
-func NewCheckCmd(ctx context.Context, timeout time.Duration) *cobra.Command {
-	return &cobra.Command{
+func NewCheckCmd(ctx context.Context) *cobra.Command {
+	var opts CheckOptions
+
+	cmd := cobra.Command{
 		Use:     "check",
 		Short:   "Checks if a domain is reachable",
 		Aliases: []string{"v"},
-		Run: func(cmd *cobra.Command, args []string) {
-			var results [][]interface{}
-			wg, ctx := errgroup.WithContext(ctx)
-			logger := log.WithContext(ctx)
+		Run:     check(ctx, &opts),
+	}
 
-			for _, domain := range args {
-				domain := domain
-				wg.Go(func() error {
-					result, err := reachable.IsReachable(ctx, domain, timeout)
-					if err != nil {
-						if logger.Level == alog.DebugLevel {
-							logger.Error(err.Error())
-						}
+	cmd.PersistentFlags().DurationVarP(&opts.timeout, "timeout", "t", 30*time.Second, "Defines a timeout")
+	cmd.PersistentFlags().StringVarP(&opts.method, "method", "m", "get", "Defines a HTTP method to be used")
 
-						logger.WithField("domain", domain).Error("Unreachable!")
-						return err
-					}
+	return &cmd
+}
 
-					results = append(results, []interface{}{
-						domain,
-						result.StatusCode,
-						int(result.Response.DNSLookup / time.Millisecond),
-						int(result.Response.TCPConnection / time.Millisecond),
-						int(result.Response.TLSHandshake / time.Millisecond),
-						int(result.Response.ServerProcessing / time.Millisecond),
-						int(result.Response.ContentTransfer(time.Now()) / time.Hour),
-						int(result.Response.Total(time.Now()) / time.Millisecond),
-					})
+func check(ctx context.Context, opts *CheckOptions) func(cmd *cobra.Command, args []string) {
+	return func(cmd *cobra.Command, args []string) {
+		logger := log.WithContext(ctx)
 
-					logger.WithField("domain", domain).Info("Reachable!")
+		chErr := make(chan error)
+		defer close(chErr)
 
-					return nil
-				})
+		go func() {
+			for err := range chErr {
+				logger.Error(err)
+			}
+		}()
+
+		timeoutCtx, cancel := context.WithTimeout(ctx, opts.timeout)
+		defer cancel()
+
+		ch := make(chan reachable.Reachable)
+
+		go reachable.IsReachableAsync(timeoutCtx, ch, chErr, args...)
+
+		table := termtables.CreateTable()
+		table.AddHeaders(
+			"Domain",
+			"Status Code",
+			"DNS Lookup",
+			"TCP Connection",
+			"TLS Handshake",
+			"Server Processing",
+			"Content Transfer",
+			"Total Time",
+		)
+
+		for {
+			r, ok := <-ch
+			if ok == false {
+				break
 			}
 
-			if err := wg.Wait(); err != nil {
-				logger.WithError(err).Error("An error happened when trying to reach an URI")
-				return
-			}
+			table.AddRow(
+				r.Domain,
+				r.StatusCode,
+				r.Response.DNSLookup.Round(time.Millisecond),
+				r.Response.TCPConnection.Round(time.Millisecond),
+				r.Response.TLSHandshake.Round(time.Millisecond),
+				r.Response.ServerProcessing.Round(time.Microsecond),
+				fmt.Sprintf("%4d ms", int(r.Response.ContentTransfer(time.Now())/time.Millisecond)),
+				fmt.Sprintf("%4d ms", int(r.Response.Total(time.Now())/time.Millisecond)),
+			)
+		}
 
-			if logger.Level == alog.DebugLevel {
-				table := termtables.CreateTable()
-				table.AddHeaders(
-					"Domain",
-					"Status Code",
-					"DNS Lookup",
-					"TCP Connection",
-					"TLS Handshake",
-					"Server Processing",
-					"Content Transfer",
-					"Total Time",
-				)
-
-				for _, r := range results {
-					table.AddRow(r...)
-				}
-
-				fmt.Fprint(os.Stderr, table.Render())
-			}
-		},
+		fmt.Fprint(os.Stderr, table.Render())
 	}
 }
