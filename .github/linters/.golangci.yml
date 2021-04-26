@@ -1,0 +1,25 @@
+run:
+  deadline: 5m
+  tests: true
+  skip-dirs:
+  - configs
+  - charts
+
+linters:
+  enable-all: true
+  disable:
+  - errcheck
+  fast: false
+
+linters-settings:
+  misspell:
+    locale: US
+  funlen:
+    lines: 120
+    statements: 40
+
+issues:
+  exclude-rules:
+    - text: "a blank import"
+      linters:
+        - golint
