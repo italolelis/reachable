@@ -40,8 +40,7 @@ func testCreateLogContext(t *testing.T) {
 }
 
 func testCreateLogWithNilContext(t *testing.T) {
-	ctx := NewContext(nil)
-	assert.NotNil(t, ctx)
+	assert.Panics(t, func() { NewContext(nil) })
 
 	logger := WithContext(nil)
 	assert.NotNil(t, logger)
